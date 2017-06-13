@@ -93,3 +93,15 @@ before_script:
 ## Run tests, and packaging scripts
 script:
   - ./travis_configure.sh run_tests
+
+# Deploy debian packages to bintray
+deploy:
+    provider: script
+    script: beaver bintray upload -N pkg/deb/*.deb
+    skip_cleanup: true
+    on:
+        tags: true
+        condition: >
+            "$TRAVIS_OS_NAME" = "linux" -a
+            "$DIST_PACKAGE_TARGET" = "DEB" -a
+            "$CC" = "gcc"
